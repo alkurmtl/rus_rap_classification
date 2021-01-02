@@ -7,9 +7,18 @@ token_file.close()
 artists_list = open('artists.txt', 'r')
 for artist in artists_list:
     artist = artist.rstrip('\n')
+    id = -1
+    if artist[0] == '(':
+        id = artist.split()[0]
+        id = id.lstrip('(')
+        id = id.rstrip(')')
+        id = int(id)
     path = './data/' + artist
     os.mkdir(path)
-    artist = genius.search_artist(artist, sort="popularity", get_full_info=False)
+    if id == -1:
+        artist = genius.search_artist(artist, sort="popularity", get_full_info=False)
+    else:
+        artist = genius.search_artist(artist, sort="popularity", get_full_info=False, artist_id=id)
     print(artist.songs)
     for song in artist.songs:
         try:
