@@ -9,10 +9,15 @@ for artist in artists_list:
     artist = artist.rstrip('\n')
     path = './data/' + artist
     os.mkdir(path)
-    artist = genius.search_artist(artist, sort="popularity", include_features=True)
+    artist = genius.search_artist(artist, sort="popularity", get_full_info=False)
     print(artist.songs)
     for song in artist.songs:
-        lyrics_file = open(path + '/' + song.title + '.txt', 'w')
-        lyrics_file.write(song.lyrics)
+        try:
+            lyrics_file = open(path + '/' + song.title + '.txt', 'w')
+        except Exception:
+            print('Failed to create file for' + song.title)
+            continue
+        if song.lyrics is not None:
+            lyrics_file.write(song.lyrics)
         lyrics_file.close()
 
